@@ -1,0 +1,41 @@
+# Levanta DOS cajas juntas: la base de datos (PostgreSQL) y la app (Flask).
+services:
+
+  db:
+    image: postgres:17
+    container_name: rumbo_db
+    environment:
+      POSTGRES_DB: agencia
+      POSTGRES_USER: agencia
+      POSTGRES_PASSWORD: agencia_pass
+    ports:
+      - "127.0.0.1:5433:5432"        # para entrar con DBeaver: localhost, puerto 5433
+    volumes:
+      - pgdata:/var/lib/postgresql/data   # aquí se guardan tus datos
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U agencia -d agencia"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  web:
+    build: .
+    container_name: rumbo_web
+    environment:
+      DB_HOST: db
+      DB_PORT: "5432"
+      DB_NAME: agencia
+      DB_USER: agencia
+      DB_PASSWORD: agencia_pass
+    ports:
+      - "127.0.0.1:5000:5000"        # para abrir la página: http://localhost:5000
+    volumes:
+      - ./templates:/app/templates   # editas index.html y basta con refrescar el navegador
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  pgdata:

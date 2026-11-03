@@ -1,0 +1,58 @@
+name: Construir ejecutables
+
+# Se ejecuta al subir cambios a main, al crear una etiqueta (v1.0, v1.1...) o a mano.
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write   # necesario para adjuntar los archivos a un Release
+
+jobs:
+  construir:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            nombre: Rumbo-Windows
+          - os: ubuntu-latest
+            nombre: Rumbo-Linux
+          - os: macos-latest
+            nombre: Rumbo-Mac
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependencias
+        run: pip install -r requirements-build.txt
+
+      - name: Construir ejecutable
+        run: python construir.py
+
+      - name: Comprimir
+        shell: python
+        run: |
+          import os, zipfile
+          nombre = "${{ matrix.nombre }}"
+          with zipfile.ZipFile(nombre + ".zip", "w", zipfile.ZIP_DEFLATED) as z:
+              for f in os.listdir("dist"):
+                  z.write(os.path.join("dist", f), f)
+              z.write("LEEME_EQUIPO.md", "LEEME.md")
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.nombre }}
+          path: ${{ matrix.nombre }}.zip
+
+      - name: Adjuntar al Release (solo con etiqueta v*)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ matrix.nombre }}.zip
