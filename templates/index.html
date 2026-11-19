@@ -371,6 +371,16 @@
     background: #fff;
   }
 
+  /* Estilo para la nota al pie del campo */
+  .nota-campo {
+    display: block;
+    font-size: 11px;
+    color: var(--coral);
+    margin-top: 4px;
+    font-style: italic;
+    font-weight: 500;
+  }
+
   .acciones-form {
     display: flex;
     align-items: center;
@@ -829,22 +839,16 @@
             <label for="correo">Correo (opcional)</label>
             <input type="email" id="correo" placeholder="cliente@correo.com">
           </div>
-          <!-- Campos adicionales según diagrama -->
+          
+          <!-- Campos adicionales conservados -->
           <div class="campo">
             <label for="clienteNacionalidad">Nacionalidad del cliente</label>
             <input type="text" id="clienteNacionalidad" placeholder="Ej. Mexicana">
+            <span class="nota-campo">Nota: este campo aún no está activo en la base de datos.</span>
           </div>
           <div class="campo">
             <label for="clienteFechaNacimiento">Fecha de nacimiento</label>
             <input type="date" id="clienteFechaNacimiento">
-          </div>
-          <div class="campo">
-            <label for="solicitudIdServicio">ID Servicio</label>
-            <input type="number" id="solicitudIdServicio" placeholder="Opcional">
-          </div>
-          <div class="campo">
-            <label for="solicitudIdDocumentacion">ID Documentación</label>
-            <input type="number" id="solicitudIdDocumentacion" placeholder="Opcional">
           </div>
         </div>
 
@@ -920,19 +924,6 @@
               <label for="altImagen">Imagen (emoji o URL de imagen)</label>
               <input type="text" id="altImagen" placeholder="🗼  o  https://...">
             </div>
-            <!-- Campos adicionales según diagrama -->
-            <div class="campo">
-              <label for="altIdCategoria">ID Categoría</label>
-              <input type="number" id="altIdCategoria" placeholder="Opcional">
-            </div>
-            <div class="campo">
-              <label for="altIdVuelo">ID Vuelo</label>
-              <input type="number" id="altIdVuelo" placeholder="Opcional">
-            </div>
-            <div class="campo">
-              <label for="altIdDocumentacion">ID Documentación</label>
-              <input type="number" id="altIdDocumentacion" placeholder="Opcional">
-            </div>
           </div>
           <div class="acciones-form">
             <button class="boton-guardar" id="btnGuardarAlternativa">Guardar alternativa</button>
@@ -1007,19 +998,6 @@
                 <label for="vueloCupos">Cupos</label>
                 <input type="number" id="vueloCupos" min="1" placeholder="Ej. 4">
               </div>
-              <!-- Campos adicionales según diagrama -->
-              <div class="campo">
-                <label for="vueloIdSolicitud">ID Solicitud</label>
-                <input type="number" id="vueloIdSolicitud" placeholder="Opcional">
-              </div>
-              <div class="campo">
-                <label for="vueloHoraSalida">Hora de salida</label>
-                <input type="time" id="vueloHoraSalida">
-              </div>
-              <div class="campo">
-                <label for="vueloHoraLlegada">Hora de llegada</label>
-                <input type="time" id="vueloHoraLlegada">
-              </div>
             </div>
             <div class="acciones-form">
               <button class="boton-guardar" id="btnGuardarVuelo">Guardar vuelo</button>
@@ -1075,11 +1053,6 @@
                   <option value="5">5 estrellas</option>
                 </select>
               </div>
-              <!-- Campos adicionales según diagrama -->
-              <div class="campo">
-                <label for="hospIdSolicitud">ID Solicitud</label>
-                <input type="number" id="hospIdSolicitud" placeholder="Opcional">
-              </div>
             </div>
             <div class="acciones-form">
               <button class="boton-guardar" id="btnGuardarHospedaje">Guardar hospedaje</button>
@@ -1101,7 +1074,7 @@
       </div>
     </section>
 
-    <!-- ==================== ARMAR VIAJE (procesos 2.0 a 6.0) ==================== -->
+    <!-- ==================== ARMAR VIAJE ==================== -->
     <section id="pantallaViaje" class="oculto">
       <div class="encabezado-pantalla">
         <h2>Armar viaje</h2>
@@ -1157,15 +1130,6 @@
             <div class="campo">
               <label for="servPrecio">Precio (USD)</label>
               <input type="number" id="servPrecio" min="0" placeholder="Ej. 150">
-            </div>
-            <!-- Campos adicionales según diagrama -->
-            <div class="campo">
-              <label for="servIdSolicitud">ID Solicitud</label>
-              <input type="number" id="servIdSolicitud" placeholder="Opcional">
-            </div>
-            <div class="campo">
-              <label for="servProveedor">Proveedor</label>
-              <input type="text" id="servProveedor" placeholder="Ej. Transportes XYZ">
             </div>
           </div>
           <div class="acciones-form">
@@ -1277,11 +1241,6 @@
               <option>Enviada</option>
               <option>Aprobada</option>
             </select>
-          </div>
-          <!-- Campos adicionales según diagrama -->
-          <div class="campo">
-            <label for="cotIdSolicitud">ID Solicitud</label>
-            <input type="number" id="cotIdSolicitud" placeholder="Opcional">
           </div>
         </div>
         <div class="acciones-form">
@@ -1449,11 +1408,9 @@
           regreso: regreso,
           telefono: document.getElementById("telefono").value.trim(),
           correo: document.getElementById("correo").value.trim(),
-          // campos nuevos
+          // Campos adicionales conservados
           nacionalidad: document.getElementById("clienteNacionalidad").value.trim(),
-          fecha_nacimiento: document.getElementById("clienteFechaNacimiento").value,
-          id_servicio: document.getElementById("solicitudIdServicio").value,
-          id_documentacion: document.getElementById("solicitudIdDocumentacion").value
+          fecha_nacimiento: document.getElementById("clienteFechaNacimiento").value
         })
       });
 
@@ -1467,7 +1424,7 @@
       mensajeFormSolicitud.className = "mensaje-form ok";
 
       ["cliente", "destino", "categoria", "pasajeros", "salida", "regreso", "telefono", "correo",
-       "clienteNacionalidad", "clienteFechaNacimiento", "solicitudIdServicio", "solicitudIdDocumentacion"].forEach(function (id) {
+       "clienteNacionalidad", "clienteFechaNacimiento"].forEach(function (id) {
         document.getElementById(id).value = "";
       });
 
@@ -1766,9 +1723,6 @@
       aerolinea: document.getElementById("altAerolinea").value.trim(),
       precio: document.getElementById("altPrecio").value,
       imagen: document.getElementById("altImagen").value.trim(),
-      id_categoria: document.getElementById("altIdCategoria").value,
-      id_vuelo: document.getElementById("altIdVuelo").value,
-      id_documentacion: document.getElementById("altIdDocumentacion").value,
     };
 
     if (!cuerpo.destino || !cuerpo.categoria || !cuerpo.aerolinea || !cuerpo.precio) {
@@ -1823,9 +1777,6 @@
       escala: document.getElementById("vueloEscala").value,
       tarifa_neta: document.getElementById("vueloTarifa").value,
       cupos: document.getElementById("vueloCupos").value,
-      id_solicitud: document.getElementById("vueloIdSolicitud").value,
-      hora_salida: document.getElementById("vueloHoraSalida").value,
-      hora_llegada: document.getElementById("vueloHoraLlegada").value,
     };
 
     if (!cuerpo.destino || !cuerpo.aerolinea || !cuerpo.ruta || !cuerpo.tarifa_neta || !cuerpo.cupos) {
@@ -1880,7 +1831,6 @@
       zona: document.getElementById("hospZona").value.trim(),
       neto_total: document.getElementById("hospNeto").value,
       categoria: document.getElementById("hospCategoria").value,
-      id_solicitud: document.getElementById("hospIdSolicitud").value,
     };
 
     if (!cuerpo.destino || !cuerpo.hospedaje || !cuerpo.noches || !cuerpo.zona || !cuerpo.neto_total || !cuerpo.categoria) {
@@ -1979,7 +1929,6 @@
       utilidad: document.getElementById("cotUtilidad").value,
       total_cliente: document.getElementById("cotTotalCliente").value,
       estado: document.getElementById("cotEstado").value,
-      id_solicitud: document.getElementById("cotIdSolicitud").value,
     };
 
     if (!cuerpo.cliente || !cuerpo.destino || !cuerpo.costo_neto || !cuerpo.utilidad || !cuerpo.total_cliente) {
@@ -1999,7 +1948,7 @@
       msg.textContent = "Cotización " + data.folio + " guardada.";
       msg.className = "mensaje-form ok";
 
-      ["cotCliente", "cotDestino", "cotCostoNeto", "cotUtilidad", "cotTotalCliente", "cotIdSolicitud"].forEach(function (id) {
+      ["cotCliente", "cotDestino", "cotCostoNeto", "cotUtilidad", "cotTotalCliente"].forEach(function (id) {
         document.getElementById(id).value = "";
       });
 
@@ -2190,8 +2139,6 @@
       servicio: document.getElementById("servNombre").value.trim(),
       descripcion: document.getElementById("servDescripcion").value.trim(),
       precio: document.getElementById("servPrecio").value,
-      id_solicitud: document.getElementById("servIdSolicitud").value,
-      proveedor: document.getElementById("servProveedor").value.trim(),
     };
 
     if (!cuerpo.destino || !cuerpo.servicio || !cuerpo.precio) {
@@ -2205,7 +2152,7 @@
       await postJSON("/servicio", cuerpo);
       msg.textContent = "Servicio guardado.";
       msg.className = "mensaje-form ok";
-      ["servNombre", "servDescripcion", "servPrecio", "servIdSolicitud", "servProveedor"].forEach(function (id) {
+      ["servNombre", "servDescripcion", "servPrecio"].forEach(function (id) {
         document.getElementById(id).value = "";
       });
       await refrescarViaje();
